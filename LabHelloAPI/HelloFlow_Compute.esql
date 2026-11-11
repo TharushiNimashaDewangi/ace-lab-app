@@ -1,0 +1,21 @@
+-- LabHelloAPI / HelloFlow_Compute.esql
+-- GET /lab/v1/hello?name=Dew  ->  {"message":"Hello, Dew","environment":"DEV","greeting":"..."}
+--
+-- envName and greeting are EXTERNAL variables = flow User-Defined Properties (UDPs).
+-- Their values are NOT hardcoded per environment: the pipeline sets them in the BAR
+-- with `ibmint apply overrides` using the branch's conf/overrides.properties.
+
+DECLARE envName  EXTERNAL CHARACTER 'LOCAL';
+DECLARE greeting EXTERNAL CHARACTER 'Hello';
+
+CREATE COMPUTE MODULE HelloFlow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE who CHARACTER COALESCE(InputLocalEnvironment.HTTP.Input.QueryString.name, 'world');
+
+		SET OutputRoot.Properties = InputRoot.Properties;
+		SET OutputRoot.JSON.Data.message     = greeting || ', ' || who;
+		SET OutputRoot.JSON.Data.environment = envName;
+		RETURN TRUE;
+	END;
+END MODULE;
