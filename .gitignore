@@ -1,0 +1,26 @@
+# Build outputs — BARs are produced by the pipeline, never committed
+*.bar
+build/
+dist/
+out/
+
+# Integration server work directories (local testing)
+*-workdir/
+
+# Toolkit / Eclipse workspace metadata
+.metadata/
+bin/
+*.class
+
+# OS / editor noise
+.DS_Store
+.vscode/
+.idea/
+
+# Never commit secrets (lab safety net)
+*.env
+*.kdb
+*.p12
+*.jks
+*.sth
+credentials*
