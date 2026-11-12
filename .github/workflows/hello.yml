@@ -1,0 +1,22 @@
+# LAB: first workflow — learn how GitHub Actions events, jobs, runners and steps work.
+# Will be replaced by the real caller workflows (pr.yml, deploy.yml) later.
+name: Hello Actions
+
+on:
+  workflow_dispatch:          # "Run workflow" button in the Actions tab
+  push:
+    branches: [develop]       # also runs on every push/merge to develop
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest    # GitHub-hosted cloud runner (later: self-hosted Mac)
+    steps:
+      - uses: actions/checkout@v4          # copy the repo onto the runner
+
+      - name: Show what the pipeline sees
+        run: |
+          echo "Branch : ${{ github.ref_name }}"
+          echo "Event  : ${{ github.event_name }}"
+          echo "Commit : ${{ github.sha }}"
+          echo "--- conf/overrides.properties ---"
+          grep -v '^#' conf/overrides.properties
